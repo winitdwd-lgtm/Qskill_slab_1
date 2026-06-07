@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qskill Studio — Login & Spotify</title>
+  <meta name="description" content="A premium cinematic web application featuring secure login and a Spotify track downloader." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@200;300;400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- CANVAS BACKGROUND -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- AURORA ORBS -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+            stroke="url(#ng)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="ng" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#a78bfa"/>
+              <stop offset="100%" style="stop-color:#34d399"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <span class="brand-name">Qskill</span>
+      <span class="brand-tag">Studio</span>
+    </div>
+
+    <div class="nav-switcher">
+      <button class="switcher-btn active" id="tab-login" onclick="switchSection('login')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        Login
+      </button>
+      <button class="switcher-btn" id="tab-spotify" onclick="switchSection('spotify')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M8 12.5a5.5 5.5 0 0 1 8 0M6.5 10.5a8 8 0 0 1 11 0M10 14.5a2.5 2.5 0 0 1 4 0"/>
+        </svg>
+        Spotify
+      </button>
+    </div>
+
+    <div class="nav-actions">
+      <div class="status-dot"></div>
+      <span class="status-text">System Online</span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-inner" id="hero-login">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot"></span>
+        Secure Authentication
+      </div>
+      <h1 class="hero-title">Welcome <span class="title-accent">Back</span></h1>
+      <p class="hero-sub">Sign in to your personalized workspace.</p>
+    </div>
+    <div class="hero-inner hidden" id="hero-spotify">
+      <div class="hero-eyebrow spotify-eyebrow">
+        <span class="eyebrow-dot spotify-dot"></span>
+        Music Downloader
+      </div>
+      <h1 class="hero-title">Spotify <span class="title-green">Downloader</span></h1>
+      <p class="hero-sub">Paste a track link and download your music instantly.</p>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ══════════ LOGIN SECTION ══════════ -->
+    <section class="section active" id="section-login">
+      <div class="card login-card">
+
+        <!-- Card top label -->
+        <div class="card-label">
+          <div class="label-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="url(#lg)" stroke-width="1.8">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              <defs>
+                <linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#a78bfa"/>
+                  <stop offset="100%" style="stop-color:#34d399"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div>
+            <h2 class="card-title">Account Login</h2>
+            <p class="card-desc">Enter your credentials to continue</p>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <form id="loginForm" class="form" novalidate>
+
+          <div class="field" id="fg-name">
+            <label class="field-label" for="loginName">Full Name</label>
+            <div class="field-wrap">
+              <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              </svg>
+              <input type="text" id="loginName" class="field-input" placeholder="e.g. John Doe" autocomplete="name" />
+              <span class="field-check hidden" id="chk-name">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>
+              </span>
+            </div>
+            <span class="field-msg" id="msg-name"></span>
+          </div>
+
+          <div class="field" id="fg-email">
+            <label class="field-label" for="loginEmail">Email Address</label>
+            <div class="field-wrap">
+              <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+              <input type="email" id="loginEmail" class="field-input" placeholder="you@example.com" autocomplete="email" />
+              <span class="field-check hidden" id="chk-email">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>
+              </span>
+            </div>
+            <span class="field-msg" id="msg-email"></span>
+          </div>
+
+          <div class="field" id="fg-password">
+            <label class="field-label" for="loginPassword">Password</label>
+            <div class="field-wrap">
+              <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input type="password" id="loginPassword" class="field-input" placeholder="Min. 8 chars, 1 uppercase, 1 number" autocomplete="current-password" />
+              <button type="button" class="eye-btn" id="eyeBtn" onclick="togglePassword()">
+                <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+            <span class="field-msg" id="msg-password"></span>
+            <!-- Password strength bar -->
+            <div class="strength-bar" id="strengthBar">
+              <div class="strength-fill" id="strengthFill"></div>
+            </div>
+            <span class="strength-label" id="strengthLabel"></span>
+          </div>
+
+          <div class="form-row">
+            <label class="check-label">
+              <input type="checkbox" id="rememberMe" class="check-input" />
+              <span class="check-box">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20,6 9,17 4,12"/></svg>
+              </span>
+              <span class="check-text">Remember me</span>
+            </label>
+            <a href="#" class="forgot-link" onclick="event.preventDefault(); alert('A password reset link will be sent to your registered email address.')">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn-login" id="loginBtn">
+            <span class="btn-label">Sign In</span>
+            <span class="btn-spinner hidden" id="loginLoader"><span class="spin"></span></span>
+            <svg class="btn-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/>
+            </svg>
+          </button>
+        </form>
+
+        <p class="no-account">New here? <a href="#" onclick="event.preventDefault(); alert('Registration is coming soon! We\'ll notify you when it launches.')">Create an account →</a></p>
+
+        <div class="divider"><span>or sign in with</span></div>
+
+        <div class="social-row">
+          <button class="social-btn" id="btn-google" onclick="alert('Google OAuth will be available soon!')">
+            <svg width="17" height="17" viewBox="0 0 24 24">
+              <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3c-2.33-2.003-5.378-3-7.91-3A12 12 0 0 0 1.24 6.65l4.026 3.115z"/>
+              <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c3.059 0 5.842-1.154 7.961-3.04l-3.922-2.947z"/>
+              <path fill="#FBBC05" d="M19.961 20.96A11.913 11.913 0 0 0 24 12c0-.816-.08-1.6-.22-2.36H12v4.918h6.845a5.96 5.96 0 0 1-2.804 3.455l3.92 2.947z"/>
+              <path fill="#EA4335" d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.79.137-1.552.368-2.268L1.24 6.65A11.934 11.934 0 0 0 0 12c0 1.816.387 3.543 1.08 5.1l4.197-2.832z"/>
+            </svg>
+            Google
+          </button>
+          <button class="social-btn" id="btn-github" onclick="alert('GitHub OAuth will be available soon!')">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            GitHub
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════ SPOTIFY SECTION ══════════ -->
+    <section class="section" id="section-spotify">
+      <div class="card spotify-card">
+
+        <div class="card-label">
+          <div class="label-icon spotify-label-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="url(#sg)" stroke-width="1.8">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M8 12.5a5.5 5.5 0 0 1 8 0"/>
+              <path d="M6.5 10.5a8 8 0 0 1 11 0"/>
+              <path d="M10 14.5a2.5 2.5 0 0 1 4 0"/>
+              <defs>
+                <linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#1DB954"/>
+                  <stop offset="100%" style="stop-color:#22d3ee"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div>
+            <h2 class="card-title">Spotify Downloader</h2>
+            <p class="card-desc">Fetch &amp; download any Spotify track instantly</p>
+          </div>
+        </div>
+
+        <!-- Drop zone area -->
+        <div class="drop-zone" id="dropZone">
+          <div class="dz-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="url(#dzg)" stroke-width="1.4">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M8 12.5a5.5 5.5 0 0 1 8 0"/>
+              <path d="M6.5 10.5a8 8 0 0 1 11 0"/>
+              <path d="M10 14.5a2.5 2.5 0 0 1 4 0"/>
+              <defs>
+                <linearGradient id="dzg" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#1DB954"/>
+                  <stop offset="100%" style="stop-color:#22d3ee"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <p class="dz-title">Paste your Spotify link</p>
+          <p class="dz-sub">Supports any track from open.spotify.com</p>
+        </div>
+
+        <!-- URL Input -->
+        <div class="sp-field">
+          <div class="sp-input-wrap">
+            <svg class="sp-link-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+            <input type="url" id="spotifyLink" class="sp-input" placeholder="https://open.spotify.com/track/..." />
+            <button class="sp-paste-btn" type="button" onclick="pasteFromClipboard()" title="Paste from clipboard">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+              </svg>
+              Paste
+            </button>
+          </div>
+          <span class="field-msg sp-msg" id="msg-spotify"></span>
+        </div>
+
+        <!-- Fetch Button -->
+        <button class="btn-fetch" id="fetchBtn" onclick="fetchSpotifyTrack()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7,10 12,15 17,10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span class="btn-label">Fetch &amp; Download</span>
+          <span class="btn-spinner hidden" id="fetchLoader"><span class="spin sp-spin"></span></span>
+        </button>
+
+        <!-- ── TRACK RESULT ── -->
+        <div class="track-card hidden" id="trackResult">
+          <div class="track-art-wrap">
+            <img id="trackThumbnail" src="" alt="Album Art" class="track-art" />
+            <div class="track-art-glow"></div>
+            <div class="track-playing">
+              <span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="track-details">
+            <span class="track-chip">Spotify Track</span>
+            <h3 class="track-name" id="trackName">—</h3>
+            <p class="track-artist" id="trackArtist">—</p>
+            <p class="track-album" id="trackAlbum"></p>
+            <audio id="audioPreview" controls class="audio-bar"></audio>
+            <div class="track-btns">
+              <a id="downloadLink" href="#" class="btn-dl" download>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7,10 12,15 17,10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Download MP3
+              </a>
+              <button class="btn-reset" onclick="resetDownloader()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <polyline points="1,4 1,10 7,10"/>
+                  <path d="M3.51 15a9 9 0 1 0 .49-3"/>
+                </svg>
+                New Search
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── ERROR STATE ── -->
+        <div class="error-card hidden" id="trackError">
+          <div class="error-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <div>
+            <p class="error-title">Download Failed</p>
+            <p class="error-msg" id="errorText">Something went wrong.</p>
+          </div>
+          <button class="btn-retry" onclick="resetDownloader()">Retry</button>
+        </div>
+
+        <!-- How to use steps (only UI steps, no API instructions) -->
+        <div class="how-steps">
+          <div class="how-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Open Spotify → right-click any song → <strong>Share → Copy Song Link</strong></div>
+          </div>
+          <div class="how-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Paste the link into the input field above or use the <strong>Paste</strong> button</div>
+          </div>
+          <div class="how-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Click <strong>Fetch &amp; Download</strong> — preview and save your track</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>Crafted by <strong>Vineet</strong> · <span id="yr"></span> · Qskill Studio</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
